@@ -1,0 +1,115 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Fee Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 12px 0 6px;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #4CAF50;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .receipt {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px dashed #999;
+      border-radius: 8px;
+      background: #fafafa;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>College Fee Payment</h2>
+
+    <label for="studentName">Student Name</label>
+    <input type="text" id="studentName" placeholder="Enter your name">
+
+    <label for="feeType">Select Fee Type</label>
+    <select id="feeType">
+      <option value="Bus Fee" data-amount="5000">Bus Fee - ₹5000</option>
+      <option value="Tuition Fee" data-amount="20000">Tuition Fee - ₹20000</option>
+      <option value="JNTUH Fee" data-amount="3000">JNTUH Fee - ₹3000</option>
+    </select>
+
+    <button onclick="payNow()">Pay Now</button>
+
+    <div class="receipt" id="receiptBox">
+      <h3>Digital Fee Receipt</h3>
+      <p><b>Name:</b> <span id="rName"></span></p>
+      <p><b>Fee Type:</b> <span id="rFee"></span></p>
+      <p><b>Amount:</b> ₹<span id="rAmount"></span></p>
+      <p><b>Status:</b> ✅ Paid Successfully</p>
+    </div>
+  </div>
+
+  <script>
+    function payNow() {
+      let name = document.getElementById("studentName").value;
+      let feeSelect = document.getElementById("feeType");
+      let feeType = feeSelect.options[feeSelect.selectedIndex].value;
+      let amount = feeSelect.options[feeSelect.selectedIndex].getAttribute("data-amount");
+
+      if(name === "") {
+        alert("Please enter your name.");
+        return;
+      }
+
+      // UPI Payment link (replace with your college UPI ID)
+      let upiID = "yourupiid@upi"; // Example: principalcollege@upi
+      let url = `upi://pay?pa=${upiID}&pn=CollegeName&am=${amount}&cu=INR&tn=${feeType}`;
+
+      // Redirect to UPI app (PhonePe/Google Pay/Paytm)
+      window.location.href = url;
+
+      // Show receipt
+      document.getElementById("rName").innerText = name;
+      document.getElementById("rFee").innerText = feeType;
+      document.getElementById("rAmount").innerText = amount;
+      document.getElementById("receiptBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
